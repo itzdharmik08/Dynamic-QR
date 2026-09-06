@@ -46,19 +46,13 @@ export const RedirectPage: React.FC = () => {
           return;
         }
 
-        // Increment scan count in the background
+        // Fire-and-forget scan count increment
         qrService.incrementScanCount(record.qr_code).catch((err) => {
           console.error('Scan count increment error:', err);
         });
 
-        setLoading(false);
-
-        // Immediate redirection with smooth countdown fallback
-        const timer = setTimeout(() => {
-          window.location.replace(record.destination_url);
-        }, 800);
-
-        return () => clearTimeout(timer);
+        // Instant redirect directly to destination URL
+        window.location.replace(record.destination_url);
       } catch (err) {
         console.error('Redirect lookup error:', err);
         if (isMounted) {
