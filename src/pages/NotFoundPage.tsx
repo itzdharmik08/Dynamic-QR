@@ -7,10 +7,7 @@ import {
   LayoutDashboard,
   ScanLine,
   LogIn,
-  Search,
-  Compass,
-  FileQuestion,
-  HelpCircle,
+  AlertCircle,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -23,9 +20,8 @@ export const NotFoundPage: React.FC = () => {
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-brand-500 selection:text-white relative overflow-hidden">
       {/* Background ambient lighting glow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-brand-600/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-indigo-600/10 rounded-full blur-3xl" />
-        <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-rose-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-600/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/3 w-[450px] h-[450px] bg-indigo-600/10 rounded-full blur-3xl" />
       </div>
 
       {/* Top Header / Brand Bar */}
@@ -62,49 +58,47 @@ export const NotFoundPage: React.FC = () => {
         </div>
       </header>
 
-      {/* Main 404 Content */}
+      {/* Main Centered 404 Hero */}
       <main className="relative z-10 flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8">
-        <div className="w-full max-w-2xl text-center space-y-8 animate-in fade-in zoom-in-95 duration-300">
-          {/* Badge and Big 404 Graphic */}
-          <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs font-semibold">
-              <FileQuestion className="w-3.5 h-3.5 text-rose-400" />
-              <span>HTTP 404 Error • Page Not Found</span>
-            </div>
-
-            <div className="relative inline-block">
-              <span className="text-8xl sm:text-9xl font-black font-heading tracking-tighter bg-gradient-to-b from-white via-slate-200 to-slate-600 bg-clip-text text-transparent select-none drop-shadow-2xl">
-                404
-              </span>
-              <div className="absolute -top-2 -right-4 p-2.5 rounded-2xl bg-brand-600/20 border border-brand-500/30 text-brand-400 animate-bounce">
-                <Compass className="w-5 h-5 sm:w-6 sm:h-6" />
-              </div>
-            </div>
-
-            <h1 className="text-2xl sm:text-4xl font-extrabold text-white font-heading tracking-tight">
-              Lost in Cyberspace?
-            </h1>
-
-            <p className="max-w-md mx-auto text-xs sm:text-sm text-slate-400 leading-relaxed">
-              We couldn't find the page you're looking for. It may have been moved, deleted, or the address might contain a typo.
-            </p>
-
-            {/* Requested URL snippet */}
-            {location.pathname && (
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs text-slate-400 font-mono max-w-full truncate">
-                <Search className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                <span className="text-slate-500">Requested path:</span>
-                <span className="text-rose-300 font-semibold truncate">{location.pathname}</span>
-              </div>
-            )}
+        <div className="w-full max-w-xl mx-auto flex flex-col items-center text-center space-y-6 animate-in fade-in zoom-in-95 duration-300">
+          
+          {/* Status Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs font-semibold shadow-sm">
+            <AlertCircle className="w-3.5 h-3.5 text-rose-400" />
+            <span>Error 404 • Page Not Found</span>
           </div>
 
-          {/* Primary Action Buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
+          {/* Large Clean 404 Heading */}
+          <div className="py-2">
+            <div className="text-7xl sm:text-9xl font-black font-heading tracking-tight bg-gradient-to-b from-white via-slate-100 to-slate-500 bg-clip-text text-transparent select-none drop-shadow-2xl leading-none">
+              404
+            </div>
+          </div>
+
+          {/* Main Titles */}
+          <div className="space-y-2 max-w-md">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-white font-heading tracking-tight">
+              Oops! Page not found
+            </h1>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+            </p>
+          </div>
+
+          {/* Requested Path Callout */}
+          {location.pathname && (
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono text-slate-400 shadow-inner">
+              <span className="text-slate-500">Path:</span>
+              <span className="text-brand-300 font-semibold">{location.pathname}</span>
+            </div>
+          )}
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md pt-2">
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl text-xs sm:text-sm font-semibold text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:text-white transition-all shadow-md"
+              className="w-full sm:w-1/2 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-800 hover:text-white transition-all shadow-md"
             >
               <ArrowLeft className="w-4 h-4" />
               <span>Go Back</span>
@@ -113,52 +107,52 @@ export const NotFoundPage: React.FC = () => {
             {user ? (
               <Link
                 to="/dashboard"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 shadow-xl shadow-brand-600/25 transition-all hover:-translate-y-0.5"
+                className="w-full sm:w-1/2 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-white bg-brand-600 hover:bg-brand-500 shadow-xl shadow-brand-600/25 transition-all hover:-translate-y-0.5"
               >
                 <LayoutDashboard className="w-4 h-4" />
-                <span>Back to Dashboard</span>
+                <span>Dashboard</span>
               </Link>
             ) : (
               <Link
                 to="/"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 shadow-xl shadow-brand-600/25 transition-all hover:-translate-y-0.5"
+                className="w-full sm:w-1/2 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs sm:text-sm font-semibold text-white bg-brand-600 hover:bg-brand-500 shadow-xl shadow-brand-600/25 transition-all hover:-translate-y-0.5"
               >
                 <Home className="w-4 h-4" />
-                <span>Return to Homepage</span>
+                <span>Homepage</span>
               </Link>
             )}
           </div>
 
-          {/* Helpful Destination Quick Links */}
-          <div className="pt-6 border-t border-slate-900 max-w-lg mx-auto">
-            <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3 flex items-center justify-center gap-1.5">
-              <HelpCircle className="w-3.5 h-3.5" />
-              <span>Helpful Quick Links</span>
+          {/* Quick Helpful Links Grid */}
+          <div className="w-full max-w-md pt-6 border-t border-slate-900">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-3">
+              Popular Pages
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-left">
+            <div className="grid grid-cols-3 gap-2">
               <Link
                 to="/"
-                className="p-3 rounded-2xl bg-slate-900/50 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 text-xs text-slate-300 hover:text-white transition-all flex items-center gap-2"
+                className="p-3 rounded-xl bg-slate-900/40 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 text-xs text-slate-300 hover:text-white transition-all flex flex-col items-center gap-1.5 text-center group"
               >
-                <Home className="w-4 h-4 text-brand-400 shrink-0" />
-                <span className="font-medium">Homepage</span>
+                <Home className="w-4 h-4 text-brand-400 group-hover:scale-110 transition-transform" />
+                <span className="text-[11px] font-medium">Home</span>
               </Link>
               <Link
                 to="/dashboard"
-                className="p-3 rounded-2xl bg-slate-900/50 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 text-xs text-slate-300 hover:text-white transition-all flex items-center gap-2"
+                className="p-3 rounded-xl bg-slate-900/40 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 text-xs text-slate-300 hover:text-white transition-all flex flex-col items-center gap-1.5 text-center group"
               >
-                <LayoutDashboard className="w-4 h-4 text-indigo-400 shrink-0" />
-                <span className="font-medium">Dashboard</span>
+                <LayoutDashboard className="w-4 h-4 text-indigo-400 group-hover:scale-110 transition-transform" />
+                <span className="text-[11px] font-medium">Dashboard</span>
               </Link>
               <Link
                 to="/scanner"
-                className="p-3 rounded-2xl bg-slate-900/50 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 text-xs text-slate-300 hover:text-white transition-all flex items-center gap-2 col-span-2 sm:col-span-1"
+                className="p-3 rounded-xl bg-slate-900/40 hover:bg-slate-900 border border-slate-800/80 hover:border-slate-700 text-xs text-slate-300 hover:text-white transition-all flex flex-col items-center gap-1.5 text-center group"
               >
-                <ScanLine className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="font-medium">Scanner Tester</span>
+                <ScanLine className="w-4 h-4 text-emerald-400 group-hover:scale-110 transition-transform" />
+                <span className="text-[11px] font-medium">Scanner</span>
               </Link>
             </div>
           </div>
+
         </div>
       </main>
 
