@@ -2,6 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import type { User, Session } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
+import { sanitizeBrowserStorage } from '../lib/safeStorage';
+
 interface DemoUser {
   id: string;
   email: string;
@@ -20,8 +22,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const DEMO_USER_KEY = 'dynamic_qr_demo_user';
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | DemoUser | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -29,6 +29,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isDemoUser, setIsDemoUser] = useState(false);
 
   useEffect(() => {
+    // Purge any unauthorized or sensitive legacy items from browser storage
+    sanitizeBrowserStorage();
+
     if (isSupabaseConfigured && supabase) {
       // Check active Supabase session
       supabase.auth.getSession().then(({ data: { session } }) => {
@@ -47,23 +50,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       return () => subscription.unsubscribe();
     } else {
-      // Local demo mode: check if saved demo user exists
-      const savedDemo = localStorage.getItem(DEMO_USER_KEY);
-      if (savedDemo) {
-        try {
-          const parsed = JSON.parse(savedDemo);
-          setUser(parsed);
-          setIsDemoUser(true);
-        } catch {
-          // ignore
-        }
-      } else {
-        // Auto-login as demo user so dashboard works right away
-        const defaultDemo = { id: 'demo-user', email: 'demo@dynamic-qr.com' };
-        localStorage.setItem(DEMO_USER_KEY, JSON.stringify(defaultDemo));
-        setUser(defaultDemo);
-        setIsDemoUser(true);
-      }
+      // Local demo mode: user starts unauthenticated in-memory.
+      // No sensitive user credentials or data are stored in localStorage or sessionStorage.
+      setUser(null);
+      setIsDemoUser(false);
       setLoading(false);
     }
   }, []);
@@ -74,9 +64,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { error: error ? new Error(error.message) : null };
     }
 
-    // Mock local sign-in
+    // In-memory local sign-in (NO localStorage/sessionStorage persistence)
     const demo = { id: 'demo-user', email };
-    localStorage.setItem(DEMO_USER_KEY, JSON.stringify(demo));
     setUser(demo);
     setIsDemoUser(true);
     return { error: null };
@@ -88,9 +77,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return { error: error ? new Error(error.message) : null };
     }
 
-    // Mock local sign-up
+    // In-memory local sign-up (NO localStorage/sessionStorage persistence)
     const demo = { id: 'demo-user', email };
-    localStorage.setItem(DEMO_USER_KEY, JSON.stringify(demo));
     setUser(demo);
     setIsDemoUser(true);
     return { error: null };
@@ -100,15 +88,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (isSupabaseConfigured && supabase) {
       await supabase.auth.signOut();
     }
-    localStorage.removeItem(DEMO_USER_KEY);
+    // Purge any storage and reset in-memory state
+    sanitizeBrowserStorage();
     setUser(null);
     setSession(null);
     setIsDemoUser(false);
   };
 
   const loginAsDemo = () => {
+    // In-memory demo workspace access (NO localStorage/sessionStorage persistence)
     const demo = { id: 'demo-user', email: 'demo@dynamic-qr.com' };
-    localStorage.setItem(DEMO_USER_KEY, JSON.stringify(demo));
     setUser(demo);
     setIsDemoUser(true);
   };

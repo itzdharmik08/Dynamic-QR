@@ -8,7 +8,7 @@ interface AppLayoutProps {
   requireAuth?: boolean;
 }
 
-export const AppLayout: React.FC<AppLayoutProps> = ({ requireAuth = false }) => {
+export const AppLayout: React.FC<AppLayoutProps> = ({ requireAuth = true }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user, loading } = useAuth();
   const location = useLocation();

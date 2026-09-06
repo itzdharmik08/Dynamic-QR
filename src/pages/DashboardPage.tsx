@@ -37,10 +37,17 @@ export const DashboardPage: React.FC = () => {
   const [copiedSql, setCopiedSql] = useState(false);
 
   const loadData = useCallback(async (showNotification = false) => {
+    if (!user?.id) {
+      setQrs([]);
+      setStats({ total: 0, active: 0, inactive: 0, totalScans: 0 });
+      setLoading(false);
+      return;
+    }
+
     try {
       if (showNotification) setRefreshing(true);
       setTableError(null);
-      const items = await qrService.getQRs(user?.id);
+      const items = await qrService.getQRs(user.id);
       setQrs(items);
 
       if (qrService.getIsTableMissing()) {

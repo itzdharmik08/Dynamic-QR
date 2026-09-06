@@ -2,11 +2,9 @@ import { supabase, isSupabaseConfigured } from './supabase';
 import type { DynamicQR, CreateQRInput, UpdateQRInput, QRStats } from '../types/database';
 import { generateShortCode, normalizeUrl } from './utils';
 
-const STORAGE_KEY = 'dynamic_qr_local_data';
-
 export let isTableMissingInSupabase = false;
 
-// Default initial seed data for local testing
+// Default initial seed data for local in-memory testing
 const INITIAL_DEMO_DATA: DynamicQR[] = [
   {
     id: 'demo-1-uuid',
@@ -43,25 +41,16 @@ const INITIAL_DEMO_DATA: DynamicQR[] = [
   }
 ];
 
+// In-memory runtime storage for demo / fallback mode
+// STRICT SECURITY POLICY: We NEVER persist QR database records, destination URLs, or user data into localStorage or sessionStorage
+let inMemoryData: DynamicQR[] = [...INITIAL_DEMO_DATA];
+
 function getLocalData(): DynamicQR[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(INITIAL_DEMO_DATA));
-      return INITIAL_DEMO_DATA;
-    }
-    return JSON.parse(raw);
-  } catch {
-    return INITIAL_DEMO_DATA;
-  }
+  return [...inMemoryData];
 }
 
 function saveLocalData(data: DynamicQR[]): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  } catch (err) {
-    console.error('Failed to save to localStorage', err);
-  }
+  inMemoryData = [...data];
 }
 
 function isMissingTableError(err: unknown): boolean {
@@ -91,18 +80,18 @@ export const qrService = {
    * Fetch all QR codes for current user (or fallback to local storage)
    */
   async getQRs(userId?: string): Promise<DynamicQR[]> {
+    // Require authenticated user ID so unauthenticated callers receive zero records
+    if (!userId) {
+      return [];
+    }
+
     if (isSupabaseConfigured && supabase && !isTableMissingInSupabase) {
       try {
-        let query = supabase
+        const { data, error } = await supabase
           .from('dynamic_qrs')
           .select('*')
+          .eq('user_id', userId)
           .order('created_at', { ascending: false });
-
-        if (userId) {
-          query = query.eq('user_id', userId);
-        }
-
-        const { data, error } = await query;
         if (error) {
           if (isMissingTableError(error)) {
             console.warn('Supabase dynamic_qrs table not found. Using local fallback store.');
@@ -399,6 +388,9 @@ export const qrService = {
    * Aggregate statistics
    */
   async getStats(userId?: string): Promise<QRStats> {
+    if (!userId) {
+      return { total: 0, active: 0, inactive: 0, totalScans: 0 };
+    }
     const qrs = await this.getQRs(userId);
     const total = qrs.length;
     const active = qrs.filter((q) => q.status === 'active').length;
