@@ -11,15 +11,11 @@ import {
   Globe,
   Copy,
   Check,
-  Calendar,
-  BarChart3,
   Pause,
   Play,
   ArrowRight,
   Lock,
-  Tag,
 } from 'lucide-react';
-import { formatDate } from '../lib/utils';
 
 export const RedirectPage: React.FC = () => {
   const { code } = useParams<{ code: string }>();
@@ -299,58 +295,6 @@ export const RedirectPage: React.FC = () => {
           </div>
         </div>
 
-        {/* More Information Section */}
-        <div className="mt-5 pt-5 border-t border-slate-100">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">
-            More Information
-          </h3>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {/* Title / Name */}
-            <div className="p-3 rounded-xl bg-slate-50/80 border border-slate-200/80 flex items-start gap-2.5">
-              <Tag className="w-4 h-4 text-brand-600 shrink-0 mt-0.5" />
-              <div className="min-w-0">
-                <span className="text-[11px] text-slate-500 block">QR Title</span>
-                <span className="text-xs font-semibold text-slate-800 truncate block">
-                  {qr?.title || 'Untitled QR'}
-                </span>
-              </div>
-            </div>
-
-            {/* Total Scans */}
-            <div className="p-3 rounded-xl bg-slate-50/80 border border-slate-200/80 flex items-start gap-2.5">
-              <BarChart3 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-              <div className="min-w-0">
-                <span className="text-[11px] text-slate-500 block">Total Scans Recorded</span>
-                <span className="text-xs font-semibold text-slate-800 block">
-                  {qr ? qr.scan_count + 1 : 1} scans
-                </span>
-              </div>
-            </div>
-
-            {/* Dynamic Code */}
-            <div className="p-3 rounded-xl bg-slate-50/80 border border-slate-200/80 flex items-start gap-2.5">
-              <Compass className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
-              <div className="min-w-0">
-                <span className="text-[11px] text-slate-500 block">Dynamic Shortcode</span>
-                <span className="text-xs font-mono font-bold text-slate-800 block">
-                  {qr?.qr_code}
-                </span>
-              </div>
-            </div>
-
-            {/* Created Date */}
-            <div className="p-3 rounded-xl bg-slate-50/80 border border-slate-200/80 flex items-start gap-2.5">
-              <Calendar className="w-4 h-4 text-sky-600 shrink-0 mt-0.5" />
-              <div className="min-w-0">
-                <span className="text-[11px] text-slate-500 block">Created On</span>
-                <span className="text-xs font-medium text-slate-800 block">
-                  {qr?.created_at ? formatDate(qr.created_at) : 'N/A'}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
 
         {/* Auto-Redirect Progress & Action */}
         <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col gap-3">
