@@ -72,14 +72,14 @@ export const RedirectPage: React.FC = () => {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-center">
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
         <div className="relative mb-6">
-          <div className="w-16 h-16 rounded-2xl bg-brand-600/20 border border-brand-500/30 flex items-center justify-center text-brand-400 animate-pulse">
+          <div className="w-16 h-16 rounded-2xl bg-brand-50 border border-brand-200 flex items-center justify-center text-brand-600 animate-pulse">
             <Compass className="w-8 h-8 animate-spin" />
           </div>
         </div>
-        <h2 className="text-xl font-bold text-white font-heading">Resolving Destination...</h2>
-        <p className="text-xs text-slate-400 mt-2 font-mono">
+        <h2 className="text-xl font-bold text-slate-900 font-heading">Resolving Destination...</h2>
+        <p className="text-xs text-slate-500 mt-2 font-mono">
           Looking up dynamic route for /q/{code}
         </p>
       </div>
@@ -89,22 +89,22 @@ export const RedirectPage: React.FC = () => {
   // Case 1: QR Code Not Found (404)
   if (notFound) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-center">
-        <div className="max-w-md w-full p-8 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-2xl backdrop-blur-sm animate-in zoom-in-95">
-          <div className="w-16 h-16 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 mx-auto mb-5">
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
+        <div className="max-w-md w-full p-8 rounded-3xl bg-white border border-slate-200 shadow-xl animate-in zoom-in-95">
+          <div className="w-16 h-16 rounded-2xl bg-rose-50 border border-rose-200 flex items-center justify-center text-rose-600 mx-auto mb-5">
             <FileQuestion className="w-8 h-8" />
           </div>
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20 uppercase tracking-wider">
+          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200 uppercase tracking-wider">
             404 Not Found
           </span>
-          <h1 className="text-2xl font-bold text-white mt-4 font-heading">QR Code Not Found</h1>
-          <p className="text-sm text-slate-400 mt-2 leading-relaxed">
-            The dynamic QR code <span className="font-mono text-brand-300 font-semibold">{code}</span> does not exist or has been removed.
+          <h1 className="text-2xl font-bold text-slate-900 mt-4 font-heading">QR Code Not Found</h1>
+          <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+            The dynamic QR code <span className="font-mono text-brand-600 font-semibold">{code}</span> does not exist or has been removed.
           </p>
           <div className="mt-8">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-sm font-medium transition-all border border-slate-200"
             >
               Go to Dynamic QR Homepage
             </Link>
@@ -117,17 +117,17 @@ export const RedirectPage: React.FC = () => {
   // Case 2: QR Code Inactive
   if (isInactive) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-center">
-        <div className="max-w-md w-full p-8 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-2xl backdrop-blur-sm animate-in zoom-in-95">
-          <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mx-auto mb-5">
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
+        <div className="max-w-md w-full p-8 rounded-3xl bg-white border border-slate-200 shadow-xl animate-in zoom-in-95">
+          <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 mx-auto mb-5">
             <AlertTriangle className="w-8 h-8" />
           </div>
-          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20 uppercase tracking-wider">
+          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 uppercase tracking-wider">
             Disabled
           </span>
-          <h1 className="text-2xl font-bold text-white mt-4 font-heading">QR Code Inactive</h1>
-          <p className="text-sm text-slate-400 mt-2 leading-relaxed">
-            This QR code (<span className="font-mono text-slate-200 font-semibold">{code}</span>) is temporarily inactive. Please contact the owner or check back later.
+          <h1 className="text-2xl font-bold text-slate-900 mt-4 font-heading">QR Code Inactive</h1>
+          <p className="text-sm text-slate-600 mt-2 leading-relaxed">
+            This QR code (<span className="font-mono text-slate-800 font-semibold">{code}</span>) is temporarily inactive. Please contact the owner or check back later.
           </p>
           {qr?.title && (
             <p className="text-xs text-slate-500 mt-3 italic">
@@ -137,7 +137,7 @@ export const RedirectPage: React.FC = () => {
           <div className="mt-8">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium transition-all"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-sm font-medium transition-all border border-slate-200"
             >
               Learn About Dynamic QR Codes
             </Link>
@@ -149,25 +149,25 @@ export const RedirectPage: React.FC = () => {
 
   // Case 3: Active -> Seamless Auto-Redirect
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-6 text-center">
-      <div className="max-w-md w-full p-8 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl backdrop-blur-sm">
-        <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mx-auto mb-5">
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
+      <div className="max-w-md w-full p-8 rounded-3xl bg-white border border-slate-200 shadow-xl">
+        <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 mx-auto mb-5">
           <ShieldCheck className="w-8 h-8" />
         </div>
 
-        <h1 className="text-2xl font-bold text-white font-heading">Redirecting...</h1>
-        <p className="text-sm text-slate-400 mt-2">
-          Taking you to the destination for <span className="font-mono text-brand-300 font-semibold">{code}</span>:
+        <h1 className="text-2xl font-bold text-slate-900 font-heading">Redirecting...</h1>
+        <p className="text-sm text-slate-600 mt-2">
+          Taking you to the destination for <span className="font-mono text-brand-600 font-semibold">{code}</span>:
         </p>
 
-        <div className="mt-4 p-3.5 rounded-2xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 break-all">
+        <div className="mt-4 p-3.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-mono text-slate-700 break-all">
           {qr?.destination_url}
         </div>
 
         <div className="mt-6 flex flex-col gap-3">
           <a
             href={qr?.destination_url}
-            className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-600 hover:bg-brand-500 text-white font-medium text-sm shadow-lg shadow-brand-600/25 transition-all"
+            className="w-full inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-medium text-sm shadow-sm shadow-brand-600/20 transition-all"
           >
             <span>Click here if not redirected automatically</span>
             <ExternalLink className="w-4 h-4" />

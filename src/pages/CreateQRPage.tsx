@@ -100,15 +100,15 @@ export const CreateQRPage: React.FC = () => {
           <div className="flex items-center gap-2 mb-1">
             <Link
               to="/dashboard"
-              className="text-xs font-semibold text-slate-400 hover:text-slate-200 flex items-center gap-1 transition-colors"
+              className="text-xs font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1 transition-colors"
             >
               <ArrowLeft className="w-3.5 h-3.5" /> Back to Dashboard
             </Link>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-white font-heading tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 font-heading tracking-tight">
             Create Dynamic QR Code
           </h1>
-          <p className="text-xs sm:text-sm text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
             Generate a permanent QR code whose destination URL can be changed anytime.
           </p>
         </div>
@@ -117,16 +117,16 @@ export const CreateQRPage: React.FC = () => {
       {/* Success View */}
       {createdQR ? (
         <div className="space-y-6 animate-in fade-in zoom-in-95 duration-300">
-          <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 shadow-2xl">
-            <div className="flex items-center gap-3 mb-6 pb-6 border-b border-slate-800">
-              <div className="p-2.5 rounded-2xl bg-emerald-500/10 text-emerald-400">
+          <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm">
+            <div className="flex items-center gap-3 mb-6 pb-6 border-b border-slate-100">
+              <div className="p-2.5 rounded-2xl bg-emerald-50 text-emerald-600">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-white font-heading">
+                <h2 className="text-xl font-bold text-slate-900 font-heading">
                   QR Code Successfully Generated!
                 </h2>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-slate-500">
                   Your dynamic QR code is active and ready to be printed or shared.
                 </p>
               </div>
@@ -147,26 +147,26 @@ export const CreateQRPage: React.FC = () => {
               {/* Details & Next Steps */}
               <div className="space-y-5">
                 <div className="space-y-3">
-                  <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
+                  <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
                     <div>
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
                         Title / Name
                       </span>
-                      <p className="text-sm font-semibold text-white">{createdQR.title}</p>
+                      <p className="text-sm font-semibold text-slate-900">{createdQR.title}</p>
                     </div>
                     <div>
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
                         QR Code ID
                       </span>
-                      <p className="text-sm font-mono font-bold text-brand-300">
+                      <p className="text-sm font-mono font-bold text-brand-600">
                         {createdQR.qr_code}
                       </p>
                     </div>
                     <div>
-                      <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                      <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
                         Current Destination URL
                       </span>
-                      <p className="text-xs font-mono text-slate-300 break-all">
+                      <p className="text-xs font-mono text-slate-700 break-all">
                         {createdQR.destination_url}
                       </p>
                     </div>
@@ -174,10 +174,10 @@ export const CreateQRPage: React.FC = () => {
                 </div>
 
                 {/* Educational Banner */}
-                <div className="p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 text-xs text-indigo-200 flex items-start gap-3">
-                  <Sparkles className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
+                <div className="p-4 rounded-2xl bg-indigo-50 border border-indigo-200 text-xs text-indigo-900 flex items-start gap-3">
+                  <Sparkles className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
                   <div>
-                    <strong className="text-white block mb-1">
+                    <strong className="text-indigo-950 block mb-1">
                       Print this QR code with confidence!
                     </strong>
                     You can change its destination later from your dashboard without ever reprinting the physical QR.
@@ -188,20 +188,20 @@ export const CreateQRPage: React.FC = () => {
                 <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
                   <Link
                     to={`/qr/${createdQR.id}`}
-                    className="w-full sm:w-auto flex-1 text-center px-4 py-2.5 rounded-xl text-xs font-semibold text-white bg-brand-600 hover:bg-brand-500 shadow-lg shadow-brand-600/20 transition-all"
+                    className="w-full sm:w-auto flex-1 text-center px-4 py-2.5 rounded-xl text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 shadow-sm shadow-brand-600/20 transition-all"
                   >
                     View QR Details & Edit
                   </Link>
                   <button
                     type="button"
                     onClick={handleCreateAnother}
-                    className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition-all"
+                    className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-all"
                   >
                     Create Another QR
                   </button>
                   <Link
                     to="/scanner"
-                    className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition-all flex items-center justify-center gap-1.5"
+                    className="w-full sm:w-auto px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-all flex items-center justify-center gap-1.5"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     Test in Scanner
@@ -216,9 +216,9 @@ export const CreateQRPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Form */}
           <div className="lg:col-span-2">
-            <div className="p-6 sm:p-8 rounded-3xl bg-slate-900/80 border border-slate-800 shadow-xl backdrop-blur-sm">
+            <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-sm">
               {errorMessage && (
-                <div className="mb-6 p-4 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-300 flex items-center gap-3">
+                <div className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-center gap-3">
                   <AlertCircle className="w-5 h-5 shrink-0" />
                   <span>{errorMessage}</span>
                 </div>
@@ -227,7 +227,7 @@ export const CreateQRPage: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Title */}
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">
                     Title / Label
                   </label>
                   <div className="relative">
@@ -237,18 +237,18 @@ export const CreateQRPage: React.FC = () => {
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       placeholder="e.g. Product 001"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-800/80 border border-slate-700 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 transition-all shadow-xs"
                     />
                   </div>
-                  <p className="text-[11px] text-slate-400 mt-1.5">
+                  <p className="text-[11px] text-slate-500 mt-1.5">
                     A recognizable name to identify this QR code in your dashboard.
                   </p>
                 </div>
 
                 {/* Destination URL */}
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
-                    Destination URL <span className="text-rose-400">*</span>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">
+                    Destination URL <span className="text-rose-500">*</span>
                   </label>
                   <div className="relative">
                     <Globe className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -258,24 +258,24 @@ export const CreateQRPage: React.FC = () => {
                       value={destinationUrl}
                       onChange={(e) => setDestinationUrl(e.target.value)}
                       placeholder="https://example.com/product-001"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-800/80 border border-slate-700 text-white placeholder-slate-500 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent transition-all"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 transition-all shadow-xs"
                     />
                   </div>
-                  <p className="text-[11px] text-slate-400 mt-1.5">
+                  <p className="text-[11px] text-slate-500 mt-1.5">
                     Where users will land when scanning. You can change this destination anytime!
                   </p>
                 </div>
 
                 {/* Custom Shortcode / Auto-code */}
-                <div className="pt-2 border-t border-slate-800/80">
+                <div className="pt-2 border-t border-slate-200">
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-xs font-semibold uppercase tracking-wider text-slate-300">
+                    <label className="text-xs font-semibold uppercase tracking-wider text-slate-700">
                       QR Identifier Code
                     </label>
                     <button
                       type="button"
                       onClick={() => setIsCustomizingCode(!isCustomizingCode)}
-                      className="text-xs text-brand-400 hover:text-brand-300 font-medium"
+                      className="text-xs text-brand-600 hover:text-brand-700 font-semibold"
                     >
                       {isCustomizingCode ? 'Use Auto-Generated' : 'Customize Code'}
                     </button>
@@ -291,8 +291,8 @@ export const CreateQRPage: React.FC = () => {
                         maxLength={12}
                         className={`w-full px-4 py-2.5 rounded-xl font-mono text-sm tracking-wider uppercase transition-all ${
                           isCustomizingCode
-                            ? 'bg-slate-800 text-white border border-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500'
-                            : 'bg-slate-800/40 text-slate-400 border border-slate-800 cursor-not-allowed'
+                            ? 'bg-white text-slate-900 border border-slate-300 focus:outline-none focus:ring-2 focus:ring-brand-500/40 shadow-xs'
+                            : 'bg-slate-100 text-slate-500 border border-slate-200 cursor-not-allowed'
                         }`}
                       />
                     </div>
@@ -300,7 +300,7 @@ export const CreateQRPage: React.FC = () => {
                       type="button"
                       onClick={handleRegenerateCode}
                       title="Generate new random code"
-                      className="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors border border-slate-700/60"
+                      className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition-colors border border-slate-200"
                     >
                       <RefreshCw className="w-4 h-4" />
                     </button>
@@ -312,7 +312,7 @@ export const CreateQRPage: React.FC = () => {
 
                 {/* Status Selection */}
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-700 mb-2">
                     Status
                   </label>
                   <div className="grid grid-cols-2 gap-3">
@@ -321,11 +321,11 @@ export const CreateQRPage: React.FC = () => {
                       onClick={() => setStatus('active')}
                       className={`p-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
                         status === 'active'
-                          ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400'
-                          : 'bg-slate-800/40 border-slate-700 text-slate-400 hover:bg-slate-800'
+                          ? 'bg-emerald-50 border-emerald-300 text-emerald-700 shadow-xs'
+                          : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                       }`}
                     >
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                       Active (Redirect Enabled)
                     </button>
                     <button
@@ -333,22 +333,22 @@ export const CreateQRPage: React.FC = () => {
                       onClick={() => setStatus('inactive')}
                       className={`p-3 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-all ${
                         status === 'inactive'
-                          ? 'bg-amber-500/10 border-amber-500/40 text-amber-400'
-                          : 'bg-slate-800/40 border-slate-700 text-slate-400 hover:bg-slate-800'
+                          ? 'bg-amber-50 border-amber-300 text-amber-700 shadow-xs'
+                          : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'
                       }`}
                     >
-                      <span className="w-2 h-2 rounded-full bg-amber-400" />
+                      <span className="w-2 h-2 rounded-full bg-amber-500" />
                       Inactive (Disabled)
                     </button>
                   </div>
                 </div>
 
                 {/* Submit Button */}
-                <div className="pt-4 border-t border-slate-800">
+                <div className="pt-4 border-t border-slate-200">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold text-white bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 shadow-xl shadow-brand-600/25 transition-all disabled:opacity-50 hover:-translate-y-0.5 text-sm"
+                    className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-semibold text-white bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 shadow-sm shadow-brand-600/20 transition-all disabled:opacity-50 hover:-translate-y-0.5 text-sm"
                   >
                     {isSubmitting ? (
                       <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
@@ -364,8 +364,8 @@ export const CreateQRPage: React.FC = () => {
 
           {/* Right Column: Live Encoding Preview */}
           <div className="space-y-6">
-            <div className="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 backdrop-blur-sm">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-400 mb-4 text-center">
+            <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 mb-4 text-center">
                 Live QR Encoding Preview
               </h3>
 
@@ -379,10 +379,10 @@ export const CreateQRPage: React.FC = () => {
                 />
               </div>
 
-              <div className="mt-4 p-3.5 rounded-2xl bg-indigo-950/30 border border-indigo-500/20 text-indigo-300 text-xs flex items-start gap-2.5">
-                <ShieldCheck className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
+              <div className="mt-4 p-3.5 rounded-2xl bg-indigo-50 border border-indigo-200 text-indigo-900 text-xs flex items-start gap-2.5">
+                <ShieldCheck className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
                 <div className="leading-relaxed">
-                  Notice: The QR code encodes only <span className="font-mono text-white">/q/{customCode}</span>. Even if you change the destination later, the image above will remain 100% unchanged!
+                  Notice: The QR code encodes only <span className="font-mono text-indigo-950 font-bold">/q/{customCode}</span>. Even if you change the destination later, the image above will remain 100% unchanged!
                 </div>
               </div>
             </div>

@@ -38,26 +38,26 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`pointer-events-auto flex items-start gap-3 p-4 rounded-xl shadow-xl border backdrop-blur-md transition-all duration-300 transform translate-y-0 animate-in fade-in slide-in-from-bottom-3 ${
+            className={`pointer-events-auto flex items-start gap-3 p-4 rounded-xl shadow-lg border backdrop-blur-md transition-all duration-300 transform translate-y-0 animate-in fade-in slide-in-from-bottom-3 ${
               toast.type === 'success'
-                ? 'bg-slate-900/95 border-emerald-500/30 text-emerald-300'
+                ? 'bg-white/95 border-emerald-200 text-emerald-900 shadow-emerald-500/5'
                 : toast.type === 'error'
-                ? 'bg-slate-900/95 border-rose-500/30 text-rose-300'
+                ? 'bg-white/95 border-rose-200 text-rose-900 shadow-rose-500/5'
                 : toast.type === 'warning'
-                ? 'bg-slate-900/95 border-amber-500/30 text-amber-300'
-                : 'bg-slate-900/95 border-indigo-500/30 text-indigo-300'
+                ? 'bg-white/95 border-amber-200 text-amber-900 shadow-amber-500/5'
+                : 'bg-white/95 border-indigo-200 text-indigo-900 shadow-indigo-500/5'
             }`}
           >
             <div className="shrink-0 mt-0.5">
-              {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-400" />}
-              {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-rose-400" />}
-              {toast.type === 'warning' && <AlertTriangle className="w-5 h-5 text-amber-400" />}
-              {toast.type === 'info' && <Info className="w-5 h-5 text-indigo-400" />}
+              {toast.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-600" />}
+              {toast.type === 'error' && <AlertCircle className="w-5 h-5 text-rose-600" />}
+              {toast.type === 'warning' && <AlertTriangle className="w-5 h-5 text-amber-600" />}
+              {toast.type === 'info' && <Info className="w-5 h-5 text-indigo-600" />}
             </div>
-            <p className="text-sm font-medium text-slate-100 flex-1 leading-snug">{toast.message}</p>
+            <p className="text-sm font-medium text-slate-800 flex-1 leading-snug">{toast.message}</p>
             <button
               onClick={() => removeToast(toast.id)}
-              className="text-slate-400 hover:text-slate-200 transition-colors p-1"
+              className="text-slate-400 hover:text-slate-600 transition-colors p-1"
             >
               <X className="w-4 h-4" />
             </button>

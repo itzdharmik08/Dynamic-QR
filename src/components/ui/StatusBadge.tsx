@@ -14,13 +14,13 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, size = 'md' })
         size === 'sm' ? 'px-2 py-0.5 text-xs' : 'px-2.5 py-1 text-xs'
       } ${
         isActive
-          ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
-          : 'bg-slate-500/10 text-slate-400 border-slate-500/30'
+          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+          : 'bg-slate-100 text-slate-600 border-slate-200'
       }`}
     >
       <span
         className={`w-1.5 h-1.5 rounded-full ${
-          isActive ? 'bg-emerald-400 animate-pulse' : 'bg-slate-400'
+          isActive ? 'bg-emerald-500 animate-pulse' : 'bg-slate-400'
         }`}
       />
       {isActive ? 'Active' : 'Inactive'}

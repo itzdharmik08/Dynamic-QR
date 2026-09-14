@@ -117,7 +117,7 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, isScanningActive = tru
   return (
     <div className="w-full max-w-md mx-auto">
       {/* Mode Selector Tabs */}
-      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-900 border border-slate-800 mb-4 text-xs font-medium">
+      <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-slate-100 border border-slate-200 mb-4 text-xs font-medium">
         <button
           type="button"
           onClick={() => {
@@ -126,8 +126,8 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, isScanningActive = tru
           }}
           className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl transition-all ${
             scannerMode === 'camera'
-              ? 'bg-brand-600 text-white shadow-md'
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'bg-brand-600 text-white shadow-xs'
+              : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           <Camera className="w-4 h-4" />
@@ -142,8 +142,8 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, isScanningActive = tru
           }}
           className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl transition-all ${
             scannerMode === 'file'
-              ? 'bg-brand-600 text-white shadow-md'
-              : 'text-slate-400 hover:text-slate-200'
+              ? 'bg-brand-600 text-white shadow-xs'
+              : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           <Upload className="w-4 h-4" />
@@ -152,7 +152,7 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, isScanningActive = tru
       </div>
 
       {/* Reader Target Area */}
-      <div className="relative overflow-hidden rounded-2xl bg-slate-900/80 border border-slate-800 p-4 shadow-xl">
+      <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
         <div
           id={elementId}
           className={`w-full overflow-hidden rounded-xl aspect-square flex items-center justify-center ${
@@ -162,20 +162,20 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, isScanningActive = tru
 
         {scannerMode === 'camera' && cameraError && (
           <div className="p-4 text-center">
-            <div className="p-3 inline-flex rounded-full bg-rose-500/10 text-rose-400 mb-2">
+            <div className="p-3 inline-flex rounded-full bg-rose-50 text-rose-600 mb-2">
               <AlertCircle className="w-6 h-6" />
             </div>
-            <p className="text-xs text-rose-300 font-medium mb-3">{cameraError}</p>
+            <p className="text-xs text-rose-700 font-medium mb-3">{cameraError}</p>
             <div className="flex items-center justify-center gap-2">
               <button
                 onClick={startCamera}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-white transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-medium text-slate-700 border border-slate-200 transition-colors"
               >
                 <RefreshCw className="w-3.5 h-3.5" /> Retry Camera
               </button>
               <button
                 onClick={() => setScannerMode('file')}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-500 text-xs font-medium text-white transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-xs font-medium text-white transition-colors"
               >
                 <Upload className="w-3.5 h-3.5" /> Use Image Upload
               </button>
@@ -184,14 +184,14 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, isScanningActive = tru
         )}
 
         {scannerMode === 'camera' && isCameraRunning && (
-          <div className="mt-3 flex items-center justify-between text-xs text-slate-400 px-2">
-            <span className="flex items-center gap-1.5 text-emerald-400">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="mt-3 flex items-center justify-between text-xs text-slate-500 px-2">
+            <span className="flex items-center gap-1.5 text-emerald-600 font-medium">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
               Camera Live
             </span>
             <button
               onClick={stopCamera}
-              className="text-xs text-slate-400 hover:text-rose-400 flex items-center gap-1 transition-colors"
+              className="text-xs text-slate-500 hover:text-rose-600 flex items-center gap-1 transition-colors"
             >
               <StopCircle className="w-3.5 h-3.5" /> Stop Camera
             </button>
@@ -210,21 +210,21 @@ export const Scanner: React.FC<ScannerProps> = ({ onScan, isScanningActive = tru
             />
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-slate-700 hover:border-brand-500 rounded-2xl p-8 cursor-pointer transition-all hover:bg-slate-800/40 group flex flex-col items-center justify-center"
+              className="border-2 border-dashed border-slate-300 hover:border-brand-500 rounded-2xl p-8 cursor-pointer transition-all hover:bg-brand-50/20 group flex flex-col items-center justify-center"
             >
-              <div className="p-3.5 rounded-2xl bg-slate-800 group-hover:bg-brand-600/20 group-hover:text-brand-400 text-slate-400 mb-3 transition-colors">
+              <div className="p-3.5 rounded-2xl bg-slate-100 group-hover:bg-brand-50 group-hover:text-brand-600 text-slate-500 mb-3 transition-colors">
                 <Upload className="w-7 h-7" />
               </div>
-              <p className="text-sm font-semibold text-slate-200">
+              <p className="text-sm font-semibold text-slate-800">
                 Click to upload a QR code image
               </p>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-500 mt-1">
                 Supports PNG, JPG, WEBP, or SVG
               </p>
             </div>
 
             {fileError && (
-              <div className="mt-3 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-xs text-rose-300 flex items-center gap-2 text-left">
+              <div className="mt-3 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-center gap-2 text-left">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{fileError}</span>
               </div>

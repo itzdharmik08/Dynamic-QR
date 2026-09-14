@@ -126,19 +126,19 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
             placeholder="Search by code, title, or destination..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 transition-all shadow-xs"
           />
         </div>
 
         {/* Filters */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-900 border border-slate-800 text-xs">
+          <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-100 border border-slate-200 text-xs">
             <button
               onClick={() => setStatusFilter('all')}
               className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
                 statusFilter === 'all'
-                  ? 'bg-brand-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-brand-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               All ({qrs.length})
@@ -147,8 +147,8 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
               onClick={() => setStatusFilter('active')}
               className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
                 statusFilter === 'active'
-                  ? 'bg-emerald-600 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-emerald-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               Active ({qrs.filter((q) => q.status === 'active').length})
@@ -157,8 +157,8 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
               onClick={() => setStatusFilter('inactive')}
               className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
                 statusFilter === 'inactive'
-                  ? 'bg-slate-700 text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-slate-700 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               Inactive ({qrs.filter((q) => q.status === 'inactive').length})
@@ -168,14 +168,14 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
       </div>
 
       {/* Table Container */}
-      <div className="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-sm shadow-xl">
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         {filteredQrs.length === 0 ? (
           <div className="py-16 text-center">
-            <div className="inline-flex p-4 rounded-full bg-slate-800/80 text-slate-400 mb-3">
+            <div className="inline-flex p-4 rounded-full bg-slate-100 text-slate-400 mb-3">
               <QrCode className="w-8 h-8" />
             </div>
-            <h4 className="text-base font-semibold text-slate-200">No dynamic QR codes found</h4>
-            <p className="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+            <h4 className="text-base font-semibold text-slate-800">No dynamic QR codes found</h4>
+            <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
               {searchTerm || statusFilter !== 'all'
                 ? 'Try adjusting your search query or status filter.'
                 : 'Create your first dynamic QR code to get started!'}
@@ -184,7 +184,7 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
               <div className="mt-5">
                 <Link
                   to="/qr/create"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-brand-600 hover:bg-brand-500 transition-all shadow-lg shadow-brand-600/25"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-white bg-brand-600 hover:bg-brand-700 transition-all shadow-sm shadow-brand-600/20"
                 >
                   Create New QR
                 </Link>
@@ -194,14 +194,14 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-slate-800 bg-slate-950/40 text-xs font-semibold uppercase tracking-wider text-slate-400">
+              <thead className="border-b border-slate-200 bg-slate-50/80 text-xs font-semibold uppercase tracking-wider text-slate-500">
                 <tr>
                   <th scope="col" className="px-5 py-3.5">
                     QR Code
                   </th>
                   <th
                     scope="col"
-                    className="px-5 py-3.5 cursor-pointer hover:text-slate-200"
+                    className="px-5 py-3.5 cursor-pointer hover:text-slate-900"
                     onClick={() => toggleSort('title')}
                   >
                     <div className="flex items-center gap-1.5">
@@ -217,7 +217,7 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
                   </th>
                   <th
                     scope="col"
-                    className="px-5 py-3.5 cursor-pointer hover:text-slate-200"
+                    className="px-5 py-3.5 cursor-pointer hover:text-slate-900"
                     onClick={() => toggleSort('scan_count')}
                   >
                     <div className="flex items-center gap-1.5">
@@ -227,7 +227,7 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
                   </th>
                   <th
                     scope="col"
-                    className="px-5 py-3.5 cursor-pointer hover:text-slate-200"
+                    className="px-5 py-3.5 cursor-pointer hover:text-slate-900"
                     onClick={() => toggleSort('created_at')}
                   >
                     <div className="flex items-center gap-1.5">
@@ -240,11 +240,11 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-slate-100">
                 {filteredQrs.map((qr) => (
                   <tr
                     key={qr.id}
-                    className="transition-colors hover:bg-slate-800/40 group"
+                    className="transition-colors hover:bg-slate-50/80 group"
                   >
                     {/* QR Code Identification */}
                     <td className="px-5 py-4 whitespace-nowrap">
@@ -252,15 +252,15 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
                         <button
                           onClick={() => setQrToDownload(qr)}
                           title="Click to preview & download"
-                          className="p-1.5 rounded-lg bg-slate-800 hover:bg-brand-600/30 text-slate-300 hover:text-brand-300 transition-colors border border-slate-700/50"
+                          className="p-1.5 rounded-lg bg-slate-100 hover:bg-brand-50 text-slate-600 hover:text-brand-600 transition-colors border border-slate-200"
                         >
                           <QrCode className="w-4 h-4" />
                         </button>
                         <div>
-                          <span className="font-mono font-bold text-brand-300 text-sm">
+                          <span className="font-mono font-bold text-brand-600 text-sm">
                             {qr.qr_code}
                           </span>
-                          <span className="block text-[11px] text-slate-500 font-mono">
+                          <span className="block text-[11px] text-slate-400 font-mono">
                             /q/{qr.qr_code}
                           </span>
                         </div>
@@ -271,7 +271,7 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
                     <td className="px-5 py-4 whitespace-nowrap">
                       <Link
                         to={`/qr/${qr.id}`}
-                        className="font-semibold text-slate-100 hover:text-brand-400 transition-colors"
+                        className="font-semibold text-slate-900 hover:text-brand-600 transition-colors"
                       >
                         {qr.title}
                       </Link>
@@ -285,7 +285,7 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
                           target="_blank"
                           rel="noreferrer"
                           title={qr.destination_url}
-                          className="text-xs font-mono text-slate-300 hover:text-brand-300 truncate inline-block max-w-[200px]"
+                          className="text-xs font-mono text-slate-600 hover:text-brand-600 truncate inline-block max-w-[200px]"
                         >
                           {truncate(qr.destination_url, 30)}
                         </a>
@@ -293,7 +293,7 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
                           href={qr.destination_url}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-slate-500 hover:text-slate-300"
+                          className="text-slate-400 hover:text-slate-600"
                         >
                           <ExternalLink className="w-3.5 h-3.5" />
                         </a>
@@ -306,14 +306,14 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
                     </td>
 
                     {/* Scans */}
-                    <td className="px-5 py-4 whitespace-nowrap font-medium text-slate-300">
-                      <span className="inline-block px-2.5 py-1 rounded-lg bg-slate-800/80 font-mono text-xs border border-slate-700/50">
+                    <td className="px-5 py-4 whitespace-nowrap font-medium text-slate-700">
+                      <span className="inline-block px-2.5 py-1 rounded-lg bg-slate-100 font-mono text-xs border border-slate-200">
                         {qr.scan_count}
                       </span>
                     </td>
 
                     {/* Created */}
-                    <td className="px-5 py-4 whitespace-nowrap text-xs text-slate-400">
+                    <td className="px-5 py-4 whitespace-nowrap text-xs text-slate-500">
                       {formatDate(qr.created_at)}
                     </td>
 
@@ -325,7 +325,7 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
                           type="button"
                           onClick={() => setQrToQuickEdit(qr)}
                           title="Change destination URL"
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-brand-300 hover:bg-brand-500/10 transition-colors"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-brand-600 hover:bg-brand-50 transition-colors"
                         >
                           <Globe className="w-4 h-4" />
                         </button>
@@ -334,7 +334,7 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
                         <Link
                           to={`/qr/${qr.id}`}
                           title="View & Edit Details"
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-300 hover:bg-indigo-500/10 transition-colors"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
                         >
                           <Eye className="w-4 h-4" />
                         </Link>
@@ -344,7 +344,7 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
                           type="button"
                           onClick={() => setQrToDownload(qr)}
                           title="Download QR Code (PNG / SVG)"
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-300 hover:bg-emerald-500/10 transition-colors"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors"
                         >
                           <Download className="w-4 h-4" />
                         </button>
@@ -356,8 +356,8 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
                           title={qr.status === 'active' ? 'Deactivate QR' : 'Activate QR'}
                           className={`p-1.5 rounded-lg transition-colors ${
                             qr.status === 'active'
-                              ? 'text-slate-400 hover:text-amber-400 hover:bg-amber-500/10'
-                              : 'text-slate-500 hover:text-emerald-400 hover:bg-emerald-500/10'
+                              ? 'text-slate-400 hover:text-amber-600 hover:bg-amber-50'
+                              : 'text-slate-400 hover:text-emerald-600 hover:bg-emerald-50'
                           }`}
                         >
                           <Power className="w-4 h-4" />
@@ -368,7 +368,7 @@ export const QRCodeTable: React.FC<QRCodeTableProps> = ({
                           type="button"
                           onClick={() => setQrToDelete(qr)}
                           title="Delete QR"
-                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
