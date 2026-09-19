@@ -11,9 +11,13 @@ CREATE TABLE IF NOT EXISTS public.dynamic_qrs (
     destination_url TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
     scan_count INTEGER NOT NULL DEFAULT 0 CHECK (scan_count >= 0),
+    logo_settings JSONB DEFAULT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- Migration for existing databases:
+ALTER TABLE public.dynamic_qrs ADD COLUMN IF NOT EXISTS logo_settings JSONB DEFAULT NULL;
 
 -- 2. Performance indexes
 CREATE INDEX IF NOT EXISTS idx_dynamic_qrs_qr_code ON public.dynamic_qrs (qr_code);

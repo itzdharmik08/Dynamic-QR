@@ -16,6 +16,8 @@ import { qrService } from '../lib/qrService';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { QRCodePreview } from '../components/qr/QRCodePreview';
+import { QRLogoCustomizer } from '../components/qr/QRLogoCustomizer';
+import { DEFAULT_LOGO_SETTINGS, type QRLogoSettings } from '../lib/qrLogo';
 import type { DynamicQR } from '../types/database';
 import { generateShortCode, isValidUrl, normalizeUrl } from '../lib/utils';
 
@@ -29,6 +31,7 @@ export const CreateQRPage: React.FC = () => {
   const [customCode, setCustomCode] = useState(generateShortCode());
   const [status, setStatus] = useState<'active' | 'inactive'>('active');
   const [isCustomizingCode, setIsCustomizingCode] = useState(false);
+  const [logoSettings, setLogoSettings] = useState<QRLogoSettings>(DEFAULT_LOGO_SETTINGS);
 
   // Submission / Result states
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -62,6 +65,7 @@ export const CreateQRPage: React.FC = () => {
           destination_url: normalized,
           status,
           qr_code: customCode.trim().toUpperCase(),
+          logo_settings: logoSettings,
         },
         user?.id
       );
@@ -89,6 +93,7 @@ export const CreateQRPage: React.FC = () => {
     setTitle('');
     setDestinationUrl('');
     setCustomCode(generateShortCode());
+    setLogoSettings(DEFAULT_LOGO_SETTINGS);
     setErrorMessage(null);
   };
 
@@ -141,6 +146,9 @@ export const CreateQRPage: React.FC = () => {
                   size={240}
                   showActions={true}
                   showInfoBanner={true}
+                  logoSettings={createdQR.logo_settings || logoSettings}
+                  allowLogoCustomization={true}
+                  onLogoSettingsChange={setLogoSettings}
                 />
               </div>
 
@@ -343,6 +351,14 @@ export const CreateQRPage: React.FC = () => {
                   </div>
                 </div>
 
+                {/* Center Logo Customization Section */}
+                <div className="pt-2 border-t border-slate-200">
+                  <QRLogoCustomizer
+                    settings={logoSettings}
+                    onChange={setLogoSettings}
+                  />
+                </div>
+
                 {/* Submit Button */}
                 <div className="pt-4 border-t border-slate-200">
                   <button
@@ -376,6 +392,7 @@ export const CreateQRPage: React.FC = () => {
                   size={180}
                   showActions={false}
                   showInfoBanner={false}
+                  logoSettings={logoSettings}
                 />
               </div>
 

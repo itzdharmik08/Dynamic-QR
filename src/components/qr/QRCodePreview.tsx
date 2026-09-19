@@ -1,8 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
-import { Download, Copy, Check, ExternalLink, ShieldCheck, Sparkles } from 'lucide-react';
+import { Download, Copy, Check, ExternalLink, ShieldCheck, Sparkles, Image as ImageIcon, ChevronDown, ChevronUp } from 'lucide-react';
 import { getPermanentUrl } from '../../lib/utils';
 import { useToast } from '../../context/ToastContext';
+import {
+  type QRLogoSettings,
+  DEFAULT_LOGO_SETTINGS,
+  drawLogoOnCanvas,
+  generateHighResPNGWithLogo,
+  injectLogoIntoSVG,
+} from '../../lib/qrLogo';
+import { QRLogoCustomizer } from './QRLogoCustomizer';
 
 interface QRCodePreviewProps {
   qrCode: string;
@@ -12,6 +20,9 @@ interface QRCodePreviewProps {
   showInfoBanner?: boolean;
   darkColor?: string;
   lightColor?: string;
+  logoSettings?: QRLogoSettings;
+  onLogoSettingsChange?: (settings: QRLogoSettings) => void;
+  allowLogoCustomization?: boolean;
 }
 
 export const QRCodePreview: React.FC<QRCodePreviewProps> = ({
@@ -22,16 +33,37 @@ export const QRCodePreview: React.FC<QRCodePreviewProps> = ({
   showInfoBanner = false,
   darkColor = '#0f172a',
   lightColor = '#ffffff',
+  logoSettings,
+  onLogoSettingsChange,
+  allowLogoCustomization = false,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { showToast } = useToast();
+  const [showCustomizer, setShowCustomizer] = useState(false);
 
+  // Use passed-in logoSettings or fallback to default (the green link emblem from screenshot)
+  const [internalLogoSettings, setInternalLogoSettings] = useState<QRLogoSettings>(
+    logoSettings || DEFAULT_LOGO_SETTINGS
+  );
+
+  const activeLogoSettings = logoSettings || internalLogoSettings;
+
+  const handleSettingsChange = (newSettings: QRLogoSettings) => {
+    if (onLogoSettingsChange) {
+      onLogoSettingsChange(newSettings);
+    } else {
+      setInternalLogoSettings(newSettings);
+    }
+  };
+
+  const { showToast } = useToast();
   const permanentUrl = getPermanentUrl(qrCode);
 
   useEffect(() => {
     if (!canvasRef.current || !qrCode) return;
+
+    let isMounted = true;
 
     QRCode.toCanvas(
       canvasRef.current,
@@ -45,16 +77,26 @@ export const QRCodePreview: React.FC<QRCodePreviewProps> = ({
         },
         errorCorrectionLevel: 'H',
       },
-      (err) => {
+      async (err) => {
         if (err) {
           console.error('Failed to generate QR Code:', err);
-          setError('Failed to render QR Code');
+          if (isMounted) setError('Failed to render QR Code');
         } else {
-          setError(null);
+          if (isMounted) {
+            setError(null);
+            // Draw center logo if enabled
+            if (activeLogoSettings.enabled && canvasRef.current) {
+              await drawLogoOnCanvas(canvasRef.current, activeLogoSettings);
+            }
+          }
         }
       }
     );
-  }, [qrCode, permanentUrl, size, darkColor, lightColor]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [qrCode, permanentUrl, size, darkColor, lightColor, activeLogoSettings]);
 
   const handleCopyUrl = async () => {
     try {
@@ -69,16 +111,17 @@ export const QRCodePreview: React.FC<QRCodePreviewProps> = ({
 
   const handleDownloadPNG = async () => {
     try {
-      // Generate a high-resolution version for printing (1024x1024)
-      const highResDataUrl = await QRCode.toDataURL(permanentUrl, {
-        width: 1024,
-        margin: 2,
-        color: {
-          dark: darkColor,
-          light: lightColor,
+      // Generate a high-resolution version for printing (1024x1024) with center logo intact
+      const highResDataUrl = await generateHighResPNGWithLogo(
+        permanentUrl,
+        {
+          width: 1024,
+          margin: 2,
+          darkColor,
+          lightColor,
         },
-        errorCorrectionLevel: 'H',
-      });
+        activeLogoSettings
+      );
 
       const link = document.createElement('a');
       link.download = `dynamic-qr-${qrCode.toLowerCase()}.png`;
@@ -87,7 +130,7 @@ export const QRCodePreview: React.FC<QRCodePreviewProps> = ({
       link.click();
       document.body.removeChild(link);
 
-      showToast(`Downloaded PNG for ${qrCode}`, 'success');
+      showToast(`Downloaded high-res PNG for ${qrCode}`, 'success');
     } catch (err) {
       console.error('PNG download error:', err);
       showToast('Failed to download PNG', 'error');
@@ -96,7 +139,7 @@ export const QRCodePreview: React.FC<QRCodePreviewProps> = ({
 
   const handleDownloadSVG = async () => {
     try {
-      const svgString = await QRCode.toString(permanentUrl, {
+      let svgString = await QRCode.toString(permanentUrl, {
         type: 'svg',
         margin: 2,
         color: {
@@ -105,6 +148,11 @@ export const QRCodePreview: React.FC<QRCodePreviewProps> = ({
         },
         errorCorrectionLevel: 'H',
       });
+
+      // Inject vector center logo into the SVG
+      if (activeLogoSettings.enabled) {
+        svgString = injectLogoIntoSVG(svgString, activeLogoSettings);
+      }
 
       const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
       const blobUrl = URL.createObjectURL(blob);
@@ -124,7 +172,7 @@ export const QRCodePreview: React.FC<QRCodePreviewProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-full">
       {/* QR Canvas Container with Card styling */}
       <div className="relative group p-4 rounded-2xl bg-white shadow-md border border-slate-200 flex flex-col items-center justify-center transition-transform hover:scale-[1.01]">
         {error ? (
@@ -190,6 +238,36 @@ export const QRCodePreview: React.FC<QRCodePreviewProps> = ({
           >
             <Download className="w-3.5 h-3.5" /> Download SVG
           </button>
+        </div>
+      )}
+
+      {/* Center Logo Customizer Quick Expander */}
+      {allowLogoCustomization && (
+        <div className="w-full max-w-sm mt-3">
+          <button
+            type="button"
+            onClick={() => setShowCustomizer(!showCustomizer)}
+            className="w-full py-2 px-3 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-semibold flex items-center justify-between transition-colors shadow-2xs"
+          >
+            <span className="flex items-center gap-2">
+              <ImageIcon className="w-3.5 h-3.5 text-emerald-600" />
+              Customize Center Logo / Emblem
+            </span>
+            {showCustomizer ? (
+              <ChevronUp className="w-3.5 h-3.5 text-slate-400" />
+            ) : (
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+            )}
+          </button>
+
+          {showCustomizer && (
+            <div className="mt-2.5">
+              <QRLogoCustomizer
+                settings={activeLogoSettings}
+                onChange={handleSettingsChange}
+              />
+            </div>
+          )}
         </div>
       )}
 

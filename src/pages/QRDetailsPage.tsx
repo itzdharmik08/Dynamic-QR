@@ -19,6 +19,8 @@ import {
 import { qrService } from '../lib/qrService';
 import type { DynamicQR } from '../types/database';
 import { QRCodePreview } from '../components/qr/QRCodePreview';
+import { QRLogoCustomizer } from '../components/qr/QRLogoCustomizer';
+import { DEFAULT_LOGO_SETTINGS, type QRLogoSettings } from '../lib/qrLogo';
 import { StatusBadge } from '../components/ui/StatusBadge';
 import { ConfirmDialog } from '../components/ui/ConfirmDialog';
 import { formatDate, isValidUrl, normalizeUrl, getPermanentUrl } from '../lib/utils';
@@ -37,7 +39,7 @@ export const QRDetailsPage: React.FC = () => {
   const [title, setTitle] = useState('');
   const [destinationUrl, setDestinationUrl] = useState('');
   const [status, setStatus] = useState<'active' | 'inactive'>('active');
-  const [hasChanges, setHasChanges] = useState(false);
+  const [logoSettings, setLogoSettings] = useState<QRLogoSettings>(DEFAULT_LOGO_SETTINGS);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Dialog states
@@ -60,6 +62,7 @@ export const QRDetailsPage: React.FC = () => {
         setTitle(record.title);
         setDestinationUrl(record.destination_url);
         setStatus(record.status);
+        setLogoSettings(record.logo_settings || DEFAULT_LOGO_SETTINGS);
       } catch {
         showToast('Failed to load QR details', 'error');
         navigate('/dashboard');
@@ -71,15 +74,15 @@ export const QRDetailsPage: React.FC = () => {
     loadQR();
   }, [id, navigate, showToast]);
 
-  // Track unsaved modifications
-  useEffect(() => {
-    if (!qr) return;
-    const isDifferent =
-      title !== qr.title ||
+  // Derived unsaved modifications
+  const initialLogo = qr ? JSON.stringify(qr.logo_settings || DEFAULT_LOGO_SETTINGS) : '';
+  const currentLogo = JSON.stringify(logoSettings);
+  const hasChanges = qr
+    ? title !== qr.title ||
       destinationUrl !== qr.destination_url ||
-      status !== qr.status;
-    setHasChanges(isDifferent);
-  }, [title, destinationUrl, status, qr]);
+      status !== qr.status ||
+      initialLogo !== currentLogo
+    : false;
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,15 +101,16 @@ export const QRDetailsPage: React.FC = () => {
         title: title.trim(),
         destination_url: normalized,
         status,
+        logo_settings: logoSettings,
       });
 
       setQr(updated);
       setDestinationUrl(updated.destination_url);
       setTitle(updated.title);
       setStatus(updated.status);
-      setHasChanges(false);
+      setLogoSettings(updated.logo_settings || logoSettings);
 
-      showToast('Destination and details updated successfully! The printed QR remains unchanged.', 'success');
+      showToast('Destination and logo settings updated successfully! The printed QR remains unchanged.', 'success');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Failed to save changes';
       setErrorMessage(msg);
@@ -216,6 +220,9 @@ export const QRDetailsPage: React.FC = () => {
               size={220}
               showActions={true}
               showInfoBanner={false}
+              logoSettings={logoSettings}
+              onLogoSettingsChange={setLogoSettings}
+              allowLogoCustomization={true}
             />
 
             {/* Permanent URL Explanation Callout */}
@@ -381,6 +388,14 @@ export const QRDetailsPage: React.FC = () => {
                     Inactive
                   </button>
                 </div>
+              </div>
+
+              {/* Center Logo Customizer */}
+              <div className="pt-2 border-t border-slate-200">
+                <QRLogoCustomizer
+                  settings={logoSettings}
+                  onChange={setLogoSettings}
+                />
               </div>
 
               {/* Notice that QR stays untouched */}

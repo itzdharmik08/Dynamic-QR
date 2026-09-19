@@ -39,6 +39,8 @@ export const QRCodeDownloadModal: React.FC<QRCodeDownloadModalProps> = ({
           size={200}
           showActions={true}
           showInfoBanner={true}
+          logoSettings={qr.logo_settings}
+          allowLogoCustomization={true}
         />
       </div>
     </div>

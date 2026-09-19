@@ -1,6 +1,7 @@
 import { supabase, isSupabaseConfigured } from './supabase';
 import type { DynamicQR, CreateQRInput, UpdateQRInput, QRStats } from '../types/database';
 import { generateShortCode, normalizeUrl } from './utils';
+import { DEFAULT_LOGO_SETTINGS } from './qrLogo';
 
 export let isTableMissingInSupabase = false;
 
@@ -14,6 +15,7 @@ const INITIAL_DEMO_DATA: DynamicQR[] = [
     destination_url: 'https://example.com/product-1',
     status: 'active',
     scan_count: 5,
+    logo_settings: DEFAULT_LOGO_SETTINGS,
     created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
     updated_at: new Date(Date.now() - 86400000 * 3).toISOString(),
   },
@@ -209,27 +211,44 @@ export const qrService = {
           scan_count: 0,
         };
 
+        if (input.logo_settings !== undefined) {
+          payload.logo_settings = input.logo_settings;
+        }
+
         if (userId) {
           payload.user_id = userId;
         }
 
-        const { data, error } = await supabase
+        let result = await supabase
           .from('dynamic_qrs')
           .insert([payload])
           .select()
           .single();
 
-        if (error) {
-          if (error.code === '23505') {
+        // If remote database doesn't have logo_settings column yet, retry without it
+        if (result.error && result.error.message?.includes('logo_settings')) {
+          delete payload.logo_settings;
+          result = await supabase
+            .from('dynamic_qrs')
+            .insert([payload])
+            .select()
+            .single();
+        }
+
+        if (result.error) {
+          if (result.error.code === '23505') {
             throw new Error(`QR Code "${code}" is already taken. Please choose another code.`);
           }
-          if (isMissingTableError(error)) {
+          if (isMissingTableError(result.error)) {
             isTableMissingInSupabase = true;
           } else {
-            throw new Error(error.message);
+            throw new Error(result.error.message);
           }
         } else {
-          return data as DynamicQR;
+          return {
+            ...(result.data as DynamicQR),
+            logo_settings: input.logo_settings,
+          };
         }
       } catch (err) {
         if (isMissingTableError(err)) {
@@ -254,6 +273,7 @@ export const qrService = {
       destination_url: normalizedDest,
       status: input.status || 'active',
       scan_count: 0,
+      logo_settings: input.logo_settings,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
@@ -264,7 +284,7 @@ export const qrService = {
   },
 
   /**
-   * Update destination, title, or status of an existing QR
+   * Update destination, title, status, or logo settings of an existing QR
    */
   async updateQR(id: string, input: UpdateQRInput): Promise<DynamicQR> {
     const updates: Partial<DynamicQR> = {
@@ -274,24 +294,40 @@ export const qrService = {
     if (input.title !== undefined) updates.title = input.title.trim();
     if (input.destination_url !== undefined) updates.destination_url = normalizeUrl(input.destination_url);
     if (input.status !== undefined) updates.status = input.status;
+    if (input.logo_settings !== undefined) updates.logo_settings = input.logo_settings;
 
     if (isSupabaseConfigured && supabase && !isTableMissingInSupabase) {
       try {
-        const { data, error } = await supabase
+        let result = await supabase
           .from('dynamic_qrs')
           .update(updates)
           .eq('id', id)
           .select()
           .single();
 
-        if (error) {
-          if (isMissingTableError(error)) {
+        // If remote database doesn't have logo_settings column yet, retry without it
+        if (result.error && result.error.message?.includes('logo_settings')) {
+          const fallbackUpdates = { ...updates };
+          delete fallbackUpdates.logo_settings;
+          result = await supabase
+            .from('dynamic_qrs')
+            .update(fallbackUpdates)
+            .eq('id', id)
+            .select()
+            .single();
+        }
+
+        if (result.error) {
+          if (isMissingTableError(result.error)) {
             isTableMissingInSupabase = true;
           } else {
-            throw new Error(error.message);
+            throw new Error(result.error.message);
           }
         } else {
-          return data as DynamicQR;
+          return {
+            ...(result.data as DynamicQR),
+            ...(input.logo_settings !== undefined ? { logo_settings: input.logo_settings } : {}),
+          };
         }
       } catch (err) {
         if (isMissingTableError(err)) {

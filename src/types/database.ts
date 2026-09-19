@@ -1,3 +1,5 @@
+import type { QRLogoSettings } from '../lib/qrLogo';
+
 export type QRStatus = 'active' | 'inactive';
 
 export interface DynamicQR {
@@ -8,6 +10,7 @@ export interface DynamicQR {
   destination_url: string;
   status: QRStatus;
   scan_count: number;
+  logo_settings?: QRLogoSettings;
   created_at: string;
   updated_at: string;
 }
@@ -17,12 +20,14 @@ export interface CreateQRInput {
   destination_url: string;
   status?: QRStatus;
   qr_code?: string;
+  logo_settings?: QRLogoSettings;
 }
 
 export interface UpdateQRInput {
   title?: string;
   destination_url?: string;
   status?: QRStatus;
+  logo_settings?: QRLogoSettings;
 }
 
 export interface QRStats {
